@@ -3,27 +3,34 @@ body {
   margin: 30px;
 }
 
-.site {
-  margin-bottom: 30px;
+h1 {
+  margin-bottom: 20px;
 }
 
-.practitioner {
-  margin-left: 20px;
-  margin-bottom: 15px;
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: 200px repeat(14, 1fr);
+  gap: 2px;
+  align-items: center;
 }
 
-.availability-bar {
-  display: flex;
-  height: 18px;
-  width: 300px;
-  border: 1px solid #ccc;
-  margin: 5px 0;
+/* HEADER CELLS */
+.header {
+  font-weight: bold;
+  background: #f2f2f2;
+  padding: 6px;
 }
 
-.available {
-  background-color: #4CAF50;
+/* ROW LABELS */
+.label {
+  padding: 6px;
+  background: #fafafa;
+  font-weight: bold;
 }
 
-.unavailable {
-  background-color: #f44336;
+/* AVAILABILITY CELLS */
+.cell {
+  height: 22px;
+  background: #eee;
 }
