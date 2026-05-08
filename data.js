@@ -1,24 +1,34 @@
-const availabilityData = [
+const dates = [
+  "01 May",
+  "02 May",
+  "03 May",
+  "04 May",
+  "05 May",
+  "06 May",
+  "07 May"
+];
+
+const data = [
   {
     site: "Nuffield Hospital A",
-    practitioner: "Jane Smith",
-    date: "2026-05-10",
-    totalSlots: 20,
-    availableSlots: 6
-  },
-  {
-    site: "Nuffield Hospital A",
-    practitioner: "John Brown",
-    date: "2026-05-10",
-    totalSlots: 16,
-    availableSlots: 12
+    practitioners: [
+      {
+        name: "Jane Smith",
+        availability: [0.6, 0.2, 0.8, 0.4, 0.5, 0.1, 0.7]
+      },
+      {
+        name: "John Brown",
+        availability: [0.9, 0.6, 0.3, 0.2, 0.8, 0.7, 0.4]
+      }
+    ]
   },
   {
     site: "Nuffield Clinic B",
-    practitioner: "Sarah Patel",
-    date: "2026-05-11",
-    totalSlots: 12,
-    availableSlots: 4
+    practitioners: [
+      {
+        name: "Sarah Patel",
+        availability: [0.3, 0.4, 0.5, 0.2, 0.6, 0.3, 0.1]
+      }
+    ]
   }
 ];
-``
