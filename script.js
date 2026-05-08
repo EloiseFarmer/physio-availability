@@ -1,64 +1,67 @@
-function groupData(data) {
-  const grouped = {};
+const grid = document.getElementById("availability-grid");
 
-  data.forEach(item => {
-    if (!grouped[item.site]) {
-      grouped[item.site] = {};
-    }
-    if (!grouped[item.site][item.practitioner]) {
-      grouped[item.site][item.practitioner] = [];
-    }
-    grouped[item.site][item.practitioner].push(item);
-  });
+// Create grid container
+const gridElement = document.createElement("div");
+gridElement.className = "grid";
 
-  return grouped;
-}
+// Header row
+gridElement.appendChild(makeHeader("Site / Practitioner"));
 
-function renderAvailability() {
-  const container = document.getElementById("availability-container");
-  container.innerHTML = "";
+dates.forEach(date => {
+  gridElement.appendChild(makeHeader(date));
+});
 
-  const groupedData = groupData(availabilityData);
+// Rows
+data.forEach(site => {
+  // Site row
+  gridElement.appendChild(makeLabel(site.site, true));
+  dates.forEach(() => gridElement.appendChild(makeEmptyCell()));
 
-  Object.keys(groupedData).forEach(site => {
-    const siteDiv = document.createElement("div");
-    siteDiv.className = "site";
-    siteDiv.innerHTML = `<h2>${site}</h2>`;
+  // Practitioner rows
+  site.practitioners.forEach(prac => {
+    gridElement.appendChild(makeLabel("↳ " + prac.name));
 
-    Object.keys(groupedData[site]).forEach(practitioner => {
-      const practitionerDiv = document.createElement("div");
-      practitionerDiv.className = "practitioner";
-      practitionerDiv.innerHTML = `<h3>${practitioner}</h3>`;
-
-      groupedData[site][practitioner].forEach(entry => {
-        const label = document.createElement("div");
-        label.textContent = entry.date;
-
-        const bar = document.createElement("div");
-        bar.className = "availability-bar";
-
-        const available = document.createElement("div");
-        const unavailable = document.createElement("div");
-
-        const availablePct = (entry.availableSlots / entry.totalSlots) * 100;
-
-        available.className = "available";
-        unavailable.className = "unavailable";
-        available.style.width = availablePct + "%";
-        unavailable.style.width = (100 - availablePct) + "%";
-
-        bar.appendChild(available);
-        bar.appendChild(unavailable);
-
-        practitionerDiv.appendChild(label);
-        practitionerDiv.appendChild(bar);
-      });
-
-      siteDiv.appendChild(practitionerDiv);
+    prac.availability.forEach(value => {
+      gridElement.appendChild(makeCell(value));
     });
-
-    container.appendChild(siteDiv);
   });
+});
+
+grid.appendChild(gridElement);
+
+// Helpers
+function makeHeader(text) {
+  const div = document.createElement("div");
+  div.className = "header";
+  div.textContent = text;
+  return div;
 }
 
-renderAvailability();
+function makeLabel(text, isSite = false) {
+  const div = document.createElement("div");
+  div.className = "label";
+  if (isSite) div.style.fontWeight = "bold";
+  div.textContent = text;
+  return div;
+}
+
+function makeCell(value) {
+  const div = document.createElement("div");
+  div.className = "cell";
+  div.style.backgroundColor = availabilityColor(value);
+  return div;
+}
+
+function makeEmptyCell() {
+  const div = document.createElement("div");
+  div.className = "cell";
+  div.style.background = "#fff";
+  return div;
+}
+
+function availabilityColor(value) {
+  if (value > 0.7) return "#4caf50";     // green
+  if (value > 0.4) return "#ffeb3b";     // amber
+  if (value > 0.2) return "#ff9800";     // orange
+  return "#f44336";                      // red
+}
