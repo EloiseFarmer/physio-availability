@@ -1,66 +1,74 @@
 const container = document.getElementById("availability-grid");
-
-// clear whatever was there before
 container.innerHTML = "";
 
-/**
- * Loop over sites
- * Each site gets its OWN grid
- */
 data.forEach(site => {
-  // ---- Site title ----
-  const siteTitle = document.createElement("h2");
-  siteTitle.textContent = site.site;
-  siteTitle.style.marginTop = "30px";
-  container.appendChild(siteTitle);
 
-  // ---- Create a grid for THIS site ----
+  // ----- SITE HEADER (CLICKABLE) -----
+  const siteHeader = document.createElement("div");
+  siteHeader.textContent = "▶ " + site.site;
+  siteHeader.style.cursor = "pointer";
+  siteHeader.style.fontWeight = "bold";
+  siteHeader.style.marginTop = "30px";
+  siteHeader.style.userSelect = "none";
+
+  container.appendChild(siteHeader);
+
+  // ----- COLLAPSIBLE CONTAINER -----
+  const siteContent = document.createElement("div");
+  siteContent.style.display = "none";
+  siteContent.style.marginLeft = "20px";
+
+  // ----- GRID FOR THIS SITE -----
   const grid = document.createElement("div");
   grid.className = "grid";
 
-  // ---- Header row ----
-  grid.appendChild(makeHeader("Site / Practitioner"));
+  // Header row
+  grid.appendChild(makeHeader("Practitioner"));
   dates.forEach(d => grid.appendChild(makeHeader(d)));
 
-  // ---- Practitioner rows ----
+  // Practitioner rows
   site.practitioners.forEach(practitioner => {
-    grid.appendChild(makeLabel("↳ " + practitioner.name));
-
-    practitioner.availability.forEach(value => {
-      grid.appendChild(makeCell(value));
-    });
+    grid.appendChild(makeLabel(practitioner.name));
+    practitioner.availability.forEach(v => grid.appendChild(makeCell(v)));
   });
 
-  container.appendChild(grid);
+  siteContent.appendChild(grid);
+  container.appendChild(siteContent);
+
+  // ----- TOGGLE LOGIC -----
+  siteHeader.addEventListener("click", () => {
+    const isOpen = siteContent.style.display === "block";
+    siteContent.style.display = isOpen ? "none" : "block";
+    siteHeader.textContent = (isOpen ? "▶ " : "▼ ") + site.site;
+  });
 });
 
-/* --------------------
- Helper functions
---------------------- */
+/* ---------- helpers ---------- */
 
 function makeHeader(text) {
-  const div = document.createElement("div");
-  div.className = "header";
-  div.textContent = text;
-  return div;
+  const d = document.createElement("div");
+  d.className = "header";
+  d.textContent = text;
+  return d;
 }
 
 function makeLabel(text) {
-  const div = document.createElement("div");
-  div.className = "label";
-  div.textContent = text;
-  return div;
+  const d = document.createElement("div");
+  d.className = "label";
+  d.textContent = text;
+  return d;
 }
 
 function makeCell(value) {
-  const div = document.createElement("div");
-  div.className = "cell";
+  const d = document.createElement("div");
+  d.className = "cell";
 
-  div.style.background =
+  d.style.background =
     value > 0.7 ? "#4caf50" :
     value > 0.4 ? "#ffeb3b" :
     value > 0.2 ? "#ff9800" :
                   "#f44336";
 
-  return div;
+  return d;
 }
+``
